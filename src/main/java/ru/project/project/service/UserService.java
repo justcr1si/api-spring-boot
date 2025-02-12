@@ -1,6 +1,7 @@
 package ru.project.project.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ru.project.project.repository.User;
 import ru.project.project.repository.UserRepository;
@@ -19,6 +20,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Cacheable(value = "users")
     public List<User> findAll() {
         return userRepository.findAll();
     }
