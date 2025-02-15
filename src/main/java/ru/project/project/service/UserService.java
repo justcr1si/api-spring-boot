@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.project.project.repository.User;
 import ru.project.project.repository.UserRepository;
 
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +24,10 @@ public class UserService {
     }
 
     public User create(User user) {
-        Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
+        Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
         if (optionalUser.isPresent()) {
             throw new IllegalStateException("User already exists");
         }
-        user.setAge(Period.between(user.getDob(), LocalDate.now()).getYears());
         return userRepository.save(user);
     }
 
@@ -44,22 +41,18 @@ public class UserService {
     }
 
     @Transactional
-    public void update(Long id, String email, String name) {
+    public void updatePassword(Long id, String password) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new IllegalStateException("User not found");
         }
         User user = optionalUser.get();
-        if (email != null && !email.equals(user.getEmail())) {
-            Optional<User> foundByEmail = userRepository.findByEmail(email);
-            if (foundByEmail.isPresent()) {
+        if (password != null && !password.equals(user.getPassword())) {
+            Optional<User> foundByUsername = userRepository.findByUsername(user.getUsername());
+            if (foundByUsername.isPresent()) {
                 throw new IllegalStateException("User already exists");
             }
-            user.setEmail(email);
-        }
-
-        if (name != null && !name.equals(user.getName())) {
-            user.setName(name);
+            user.setPassword(password);
         }
     }
 }

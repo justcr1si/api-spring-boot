@@ -1,4 +1,4 @@
-package logging;
+package ru.project.project.logging;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
